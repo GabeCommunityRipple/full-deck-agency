@@ -1,0 +1,11 @@
+# *
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /login
+
+# Host
+Host: https://fulldeckagency.com
+
+# Sitemaps
+Sitemap: https://fulldeckagency.com/sitemap.xml
