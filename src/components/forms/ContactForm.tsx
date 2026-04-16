@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod/v4";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Input from "@/components/ui/Input";
 
 const schema = z.object({
@@ -14,6 +14,7 @@ const schema = z.object({
   website: z.string().optional(),
   industry: z.string().min(1, "Industry is required"),
   message: z.string().optional(),
+  company_website: z.string().optional(),
 });
 
 type FormData = z.infer<typeof schema>;
@@ -34,6 +35,11 @@ const INDUSTRY_OPTIONS = [
 
 export default function ContactForm() {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const renderTimeRef = useRef<number>(0);
+
+  useEffect(() => {
+    renderTimeRef.current = Date.now();
+  }, []);
 
   const {
     register,
@@ -48,7 +54,7 @@ export default function ContactForm() {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ ...data, form_render_time: renderTimeRef.current }),
       });
       if (!res.ok) throw new Error();
       setStatus("success");
@@ -62,13 +68,34 @@ export default function ContactForm() {
     return (
       <div className="text-center py-12">
         <p className="text-2xl font-bold text-brand-dark-gray mb-2">Thank you!</p>
-        <p className="text-gray-600">We'll be in touch within 1 business day.</p>
+        <p className="text-gray-600">We&apos;ll be in touch within 1 business day.</p>
       </div>
     );
   }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      {/* Honeypot: hidden from humans, typically filled by bots. */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          left: "-9999px",
+          width: 1,
+          height: 1,
+          overflow: "hidden",
+        }}
+      >
+        <label>
+          Company Website
+          <input
+            type="text"
+            tabIndex={-1}
+            autoComplete="off"
+            {...register("company_website")}
+          />
+        </label>
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Input
           label="First Name *"

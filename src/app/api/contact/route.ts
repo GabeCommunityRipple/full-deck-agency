@@ -4,6 +4,64 @@ import { Resend } from "resend";
 const resend = new Resend(process.env.RESEND_API_KEY);
 const CONTACT_EMAIL = process.env.CONTACT_EMAIL || "gabe@fulldeckagency.com";
 
+const RATE_LIMIT_MAX = 3;
+const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
+const rateLimitMap = new Map<string, number[]>();
+
+function getClientIp(headers: Headers): string {
+  const xff = headers.get("x-forwarded-for");
+  if (xff) return xff.split(",")[0]!.trim();
+  return headers.get("x-real-ip") || "unknown";
+}
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const fresh = (rateLimitMap.get(ip) ?? []).filter(
+    (t) => now - t < RATE_LIMIT_WINDOW_MS,
+  );
+  if (fresh.length >= RATE_LIMIT_MAX) {
+    rateLimitMap.set(ip, fresh);
+    return true;
+  }
+  fresh.push(now);
+  rateLimitMap.set(ip, fresh);
+  if (rateLimitMap.size > 1000) {
+    for (const [k, v] of rateLimitMap) {
+      const kept = v.filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
+      if (kept.length === 0) rateLimitMap.delete(k);
+      else rateLimitMap.set(k, kept);
+    }
+  }
+  return false;
+}
+
+// Flags 10+ char tokens with no spaces that are either vowel-starved
+// or have unrealistic case-flip density (e.g. "DzBEQsjOnrASKzCFms").
+function looksRandom(raw: string): boolean {
+  const s = raw.trim();
+  if (s.length < 10 || /\s/.test(s)) return false;
+  const letters = s.replace(/[^a-zA-Z]/g, "");
+  if (letters.length < 10) return false;
+  const vowels = (letters.match(/[aeiouAEIOU]/g) ?? []).length;
+  if (vowels / letters.length < 0.2) return true;
+  let transitions = 0;
+  for (let i = 1; i < letters.length; i++) {
+    if (/[A-Z]/.test(letters[i - 1]!) !== /[A-Z]/.test(letters[i]!)) {
+      transitions++;
+    }
+  }
+  if (transitions / letters.length > 0.4) return true;
+  return false;
+}
+
+function validEmail(s: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(s);
+}
+
+function validPhone(s: string): boolean {
+  return (s.match(/\d/g) ?? []).length >= 7;
+}
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
@@ -18,7 +76,29 @@ export async function POST(request: Request) {
       name,
       company,
       service_interest,
+      company_website,
+      form_render_time,
     } = body;
+
+    const ip = getClientIp(request.headers);
+
+    // Honeypot: return success so the bot doesn't retry with variations.
+    if (company_website && String(company_website).trim() !== "") {
+      console.warn("[contact] honeypot tripped", { ip });
+      return NextResponse.json({ success: true });
+    }
+
+    // Timing: require the form to have been on screen for >= 2s and < 24h.
+    const ts = Number(form_render_time);
+    const elapsed = Date.now() - ts;
+    if (!Number.isFinite(ts) || ts <= 0 || elapsed < 2000 || elapsed > 86_400_000) {
+      console.warn("[contact] timing check failed", { ip, ts, elapsed });
+      return NextResponse.json({ success: true });
+    }
+
+    if (isRateLimited(ip)) {
+      return NextResponse.json({ error: "Too many submissions" }, { status: 429 });
+    }
 
     const displayName = name || `${first_name ?? ""} ${last_name ?? ""}`.trim();
     const displayEmail = email;
@@ -26,8 +106,20 @@ export async function POST(request: Request) {
     if (!displayName || !displayEmail) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
+    if (!validEmail(String(displayEmail))) {
+      return NextResponse.json({ error: "Invalid email" }, { status: 400 });
+    }
+    if (phone && !validPhone(String(phone))) {
+      return NextResponse.json({ error: "Invalid phone" }, { status: 400 });
+    }
 
-    // Build a plain HTML email (avoids react-email version conflicts)
+    // Gibberish check on free-text fields; silent drop so bots don't tune their output.
+    const suspects = [first_name, last_name, displayName, message].filter(Boolean);
+    if (suspects.some((v) => looksRandom(String(v)))) {
+      console.warn("[contact] gibberish detected", { ip, displayName });
+      return NextResponse.json({ success: true });
+    }
+
     const htmlBody = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <div style="background-color: #c0392b; padding: 24px; border-radius: 8px 8px 0 0;">
@@ -49,7 +141,6 @@ export async function POST(request: Request) {
       </div>
     `;
 
-    // Try Supabase insert (don't let it block email)
     let supabaseError = null;
     try {
       const { createClient } = await import("@/lib/supabase/server");
@@ -70,7 +161,6 @@ export async function POST(request: Request) {
       console.error("Supabase error:", err);
     }
 
-    // Send notification email to Gabe
     let emailError = null;
     try {
       const { error } = await resend.emails.send({
@@ -85,7 +175,6 @@ export async function POST(request: Request) {
       console.error("Resend email error:", err);
     }
 
-    // Send confirmation to the person who submitted
     try {
       await resend.emails.send({
         from: "Full Deck Agency <noreply@mail.fulldeckagency.com>",
@@ -104,7 +193,6 @@ export async function POST(request: Request) {
       console.error("Confirmation email error:", err);
     }
 
-    // Return success if at least one thing worked
     if (supabaseError && emailError) {
       console.error("Both Supabase and email failed:", { supabaseError, emailError });
       return NextResponse.json({ error: "Failed to process submission" }, { status: 500 });
