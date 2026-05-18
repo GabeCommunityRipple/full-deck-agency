@@ -18,8 +18,8 @@ export const metadata: Metadata = {
     "Is your company working with a full deck? Full Deck Agency helps home service, construction, and decking businesses grow with SEO, Google Ads, social media, and more.",
   metadataBase: new URL("https://fulldeckagency.com"),
   icons: {
-    icon: "/images/logo/full-deck-square.png",
-    apple: "/images/logo/full-deck-square.png",
+    icon: "/favicon.png",
+    apple: "/favicon.png",
   },
 };
 
