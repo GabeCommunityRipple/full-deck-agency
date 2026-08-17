@@ -336,7 +336,22 @@ export default function TermsOfServicePage() {
           , which is incorporated into these Terms by reference.
         </p>
 
-        <h2 style={styles.h2}>12. Disclaimers</h2>
+        <h2 style={styles.h2}>12. SMS Messaging Terms</h2>
+        <p style={styles.p}>
+          By participating in the Full Deck Agency crew SMS program, you agree
+          to receive operational text messages related to jobsite photo
+          submission. You can opt out at any time by replying STOP; you will
+          receive one confirmation message and no further texts. Reply HELP for
+          assistance. Message frequency varies and message and data rates may
+          apply. Carriers are not liable for delayed or undelivered messages.
+          See our{" "}
+          <Link href="/privacy-policy" style={styles.link}>
+            Privacy Policy
+          </Link>{" "}
+          for how we handle your information.
+        </p>
+
+        <h2 style={styles.h2}>13. Disclaimers</h2>
         <p style={styles.p}>
           The Site and the services are provided &ldquo;as is&rdquo; and
           &ldquo;as available.&rdquo; To the fullest extent permitted by
@@ -348,7 +363,7 @@ export default function TermsOfServicePage() {
           corrected.
         </p>
 
-        <h2 style={styles.h2}>13. Limitation of Liability</h2>
+        <h2 style={styles.h2}>14. Limitation of Liability</h2>
         <p style={styles.p}>
           To the fullest extent permitted by law, Full Deck Agency and its
           owners, employees, and contractors will not be liable for any
@@ -364,7 +379,7 @@ export default function TermsOfServicePage() {
           the claim.
         </p>
 
-        <h2 style={styles.h2}>14. Indemnification</h2>
+        <h2 style={styles.h2}>15. Indemnification</h2>
         <p style={styles.p}>
           You agree to defend, indemnify, and hold harmless Full Deck
           Agency from and against any claims, damages, liabilities, losses,
@@ -375,7 +390,7 @@ export default function TermsOfServicePage() {
           third-party right.
         </p>
 
-        <h2 style={styles.h2}>15. Governing Law and Disputes</h2>
+        <h2 style={styles.h2}>16. Governing Law and Disputes</h2>
         <p style={styles.p}>
           These Terms are governed by the laws of the State of North
           Carolina, without regard to conflict-of-laws principles. The
@@ -388,7 +403,7 @@ export default function TermsOfServicePage() {
           claim.
         </p>
 
-        <h2 style={styles.h2}>16. Changes to These Terms</h2>
+        <h2 style={styles.h2}>17. Changes to These Terms</h2>
         <p style={styles.p}>
           We may update these Terms from time to time. When we do, we will
           revise the &ldquo;Effective date&rdquo; above and post the
@@ -398,7 +413,7 @@ export default function TermsOfServicePage() {
           constitutes acceptance of the updated Terms.
         </p>
 
-        <h2 style={styles.h2}>17. Miscellaneous</h2>
+        <h2 style={styles.h2}>18. Miscellaneous</h2>
         <ul style={styles.ul}>
           <li style={styles.li}>
             <strong>Entire agreement.</strong> These Terms, together with
@@ -432,7 +447,7 @@ export default function TermsOfServicePage() {
           </li>
         </ul>
 
-        <h2 style={styles.h2}>18. Contact Us</h2>
+        <h2 style={styles.h2}>19. Contact Us</h2>
         <p style={styles.p}>
           Questions about these Terms? Reach out:
         </p>

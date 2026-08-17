@@ -167,7 +167,7 @@ export default function PrivacyPolicyPage() {
             URL, approximate location based on IP);
           </li>
           <li style={styles.li}>
-            Cookie and similar tracking-technology data (see Section 5).
+            Cookie and similar tracking-technology data (see Section 6).
           </li>
         </ul>
 
@@ -236,7 +236,18 @@ export default function PrivacyPolicyPage() {
           </li>
         </ul>
 
-        <h2 style={styles.h2}>4. Client Account Access</h2>
+        <h2 style={styles.h2}>4. SMS / Text Messaging Consent</h2>
+        <p style={styles.p}>
+          Full Deck Agency operates an internal SMS program for field crew
+          members to submit jobsite photos. Mobile phone numbers and any
+          information obtained as part of this SMS program will not be shared
+          with or sold to third parties or affiliates for marketing or
+          promotional purposes. Message frequency varies. Message and data
+          rates may apply. Reply STOP to opt out at any time, or HELP for
+          assistance.
+        </p>
+
+        <h2 style={styles.h2}>5. Client Account Access</h2>
         <p style={styles.p}>
           When you grant us access to third-party platforms (Google Ads,
           Google Business Profile, Google Analytics, Search Console, Meta
@@ -248,7 +259,7 @@ export default function PrivacyPolicyPage() {
           passwords.
         </p>
 
-        <h2 style={styles.h2}>5. Cookies and Tracking Technologies</h2>
+        <h2 style={styles.h2}>6. Cookies and Tracking Technologies</h2>
         <p style={styles.p}>
           The Site uses cookies, pixels, and similar technologies to operate
           the Site, remember preferences, measure performance, and support
@@ -260,7 +271,7 @@ export default function PrivacyPolicyPage() {
           non-essential cookies.
         </p>
 
-        <h2 style={styles.h2}>6. Third-Party Services and Links</h2>
+        <h2 style={styles.h2}>7. Third-Party Services and Links</h2>
         <p style={styles.p}>
           The Site and the services we deliver may include links to or
           integrations with third-party platforms (for example, Google,
@@ -269,7 +280,7 @@ export default function PrivacyPolicyPage() {
           We are not responsible for the practices of third parties.
         </p>
 
-        <h2 style={styles.h2}>7. Data Retention</h2>
+        <h2 style={styles.h2}>8. Data Retention</h2>
         <p style={styles.p}>
           We retain personal information for as long as needed to provide
           our services, maintain business records, comply with legal,
@@ -278,7 +289,7 @@ export default function PrivacyPolicyPage() {
           to 24 months unless you ask us to delete them sooner.
         </p>
 
-        <h2 style={styles.h2}>8. Data Security</h2>
+        <h2 style={styles.h2}>9. Data Security</h2>
         <p style={styles.p}>
           We use reasonable administrative, technical, and physical
           safeguards to protect personal information. However, no method
@@ -287,7 +298,7 @@ export default function PrivacyPolicyPage() {
           keeping your account credentials confidential.
         </p>
 
-        <h2 style={styles.h2}>9. Your Choices and Rights</h2>
+        <h2 style={styles.h2}>10. Your Choices and Rights</h2>
         <p style={styles.p}>
           Depending on where you live, you may have the right to access,
           correct, delete, or receive a copy of your personal information,
@@ -301,7 +312,7 @@ export default function PrivacyPolicyPage() {
           time required by applicable law.
         </p>
 
-        <h2 style={styles.h2}>10. Children&rsquo;s Privacy</h2>
+        <h2 style={styles.h2}>11. Children&rsquo;s Privacy</h2>
         <p style={styles.p}>
           The Site and our services are intended for businesses and adults.
           We do not knowingly collect personal information from children
@@ -309,7 +320,7 @@ export default function PrivacyPolicyPage() {
           contact us and we will delete it.
         </p>
 
-        <h2 style={styles.h2}>11. International Visitors</h2>
+        <h2 style={styles.h2}>12. International Visitors</h2>
         <p style={styles.p}>
           Full Deck Agency is based in the United States. If you access the
           Site from outside the U.S., you understand that your information
@@ -317,7 +328,7 @@ export default function PrivacyPolicyPage() {
           laws may differ from those in your jurisdiction.
         </p>
 
-        <h2 style={styles.h2}>12. Changes to This Policy</h2>
+        <h2 style={styles.h2}>13. Changes to This Policy</h2>
         <p style={styles.p}>
           We may update this Privacy Policy from time to time. When we do,
           we will revise the &ldquo;Effective date&rdquo; above. Material
@@ -326,7 +337,7 @@ export default function PrivacyPolicyPage() {
           changes take effect constitutes acceptance of the updated policy.
         </p>
 
-        <h2 style={styles.h2}>13. Contact Us</h2>
+        <h2 style={styles.h2}>14. Contact Us</h2>
         <p style={styles.p}>
           Questions, requests, or concerns about this Privacy Policy or our
           handling of your information? Reach out:
